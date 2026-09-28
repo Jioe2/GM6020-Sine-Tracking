@@ -1,0 +1,79 @@
+{
+  // ---------------------------------------------------------------------------
+  //  Two environment problems on this machine are worked around here.
+  //
+  //  1. The Arm toolchain is NOT on the system PATH: it lives in
+  //     D:\download\tools\arm-toolchain\... while
+  //     cmake/gcc-arm-none-eabi.cmake resolves arm-none-eabi-gcc by name.
+  //
+  //  2. The MACHINE-level ComSpec variable is corrupt - it points at
+  //     D:\robomaster相关\openocd\openocd-20260302.7z instead of cmd.exe.
+  //     CMake's Ninja generator uses ComSpec as the shell for its
+  //     "SHELL /C ..." rules, so without this override every static-library
+  //     and link step dies with
+  //         ninja: fatal: CreateProcess: %1 is not a valid Win32 application
+  //
+  //     A User-level ComSpec override has since been written to the registry,
+  //     but this VS Code window inherits the old value until it is restarted,
+  //     so it is pinned here too. Once VS Code has been restarted (and ideally
+  //     after a re-login) both overrides below are harmless duplicates.
+  //
+  //     To fix it permanently at the machine level, run in an ADMIN shell:
+  //         setx /M ComSpec "%SystemRoot%\system32\cmd.exe"
+  //     or set it back in System Properties > Environment Variables.
+  // ---------------------------------------------------------------------------
+  "cmake.environment": {
+    "PATH": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin;D:/download/ninja-win;D:/download/bin;${env:PATH}",
+    // See the ComSpec note at the top of this file.
+    "ComSpec": "C:\\Windows\\system32\\cmd.exe"
+  },
+  "cmake.configureEnvironment": {
+    "PATH": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin;D:/download/ninja-win;D:/download/bin;${env:PATH}",
+    // See the ComSpec note at the top of this file.
+    "ComSpec": "C:\\Windows\\system32\\cmd.exe"
+  },
+  "cmake.buildEnvironment": {
+    "PATH": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin;D:/download/ninja-win;D:/download/bin;${env:PATH}",
+    // See the ComSpec note at the top of this file.
+    "ComSpec": "C:\\Windows\\system32\\cmd.exe"
+  },
+
+  // Use the project's CMakePresets.json (Debug / Release).
+  "cmake.useCMakePresets": "always",
+  "cmake.generator": "Ninja",
+  "cmake.configureOnOpen": false,
+
+  // Keep compile_commands.json generation on so IntelliSense can resolve every
+  // include without hand-maintaining includePath.
+  "cmake.configureArgs": ["-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"],
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/build/Debug/compile_commands.json",
+
+  // ---------------------------------------------------------------------------
+  //  Source files
+  // ---------------------------------------------------------------------------
+  "files.associations": {
+    "*.h": "c",
+    "*.hpp": "cpp",
+    "*.s": "assembler",
+    "*.ld": "plaintext",
+    "*.ioc": "plaintext"
+  },
+
+  // Vendored trees and build output are noise in search / the file explorer.
+  "files.exclude": {
+    "**/build": true
+  },
+  "search.exclude": {
+    "**/build": true,
+    "**/Drivers/CMSIS": true,
+    "**/components/CMSIS-DSP": true
+  },
+  "files.watcherExclude": {
+    "**/build/**": true,
+    "**/components/CMSIS-DSP/**": true
+  },
+
+  "editor.rulers": [100],
+  "C_Cpp.default.cStandard": "c11",
+  "C_Cpp.default.cppStandard": "c++20"
+}

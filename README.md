@@ -49,7 +49,12 @@ GM6020-Sine-Tracking/
 ├── simulation/              # 电脑仿真（无需硬件，用于理解与验证算法）
 │   ├── sim_gm6020.c         # 正弦跟随 + PID + 前馈 仿真
 │   └── sim_watchdog.c       # 看门狗工作过程 仿真
-└── firmware/                # 真机工程（待补充）
+└── firmware/                # 真机工程（STM32F407，RM 开发板 C 型）
+    ├── Tasks/ControlTask.cpp      # 正弦轨迹跟踪 + 分层看门狗保护（核心）
+    ├── Resources/Src/Gm6020.cpp   # GM6020 CAN 驱动
+    ├── components/pid/            # PID 组件
+    ├── Core/Src/iwdg.c            # 看门狗初始化（约 0.64s）
+    └── C_project.ioc              # CubeMX 配置（看门狗默认开启）
 ```
 
 ---
@@ -87,10 +92,8 @@ GM6020-Sine-Tracking/
 - [x] C 语言基础复习
 - [x] 正弦跟随 + PID + 前馈 仿真
 - [x] 看门狗原理与仿真
-- [ ] GM6020 CAN 通信（真机）
-- [ ] 速度正弦跟随（真机）
-- [ ] 位置正弦跟随（真机）
-- [ ] 看门狗保护（真机）
+- [x] 真机工程代码（GM6020 CAN 驱动 + 正弦跟随 + 分层看门狗保护）
+- [ ] 真机上板验证（速度跟随 / 位置跟随 / 看门狗复位）
 - [ ] 演示视频
 
 ---

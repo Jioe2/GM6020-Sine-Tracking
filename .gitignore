@@ -19,7 +19,6 @@ Release/
 *.bak
 
 # ===== IDE / 工具 =====
-.vscode/
 .idea/
 *.uvguix.*
 *.uvoptx

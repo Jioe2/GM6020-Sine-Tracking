@@ -1,0 +1,37 @@
+{
+  // IntelliSense only. The real build flags live in CMake; pointing at
+  // compile_commands.json means every include path and define comes from the
+  // generated build, so this file needs no maintenance when you add a folder.
+  //
+  // compile_commands.json is produced because .vscode/settings.json passes
+  // -DCMAKE_EXPORT_COMPILE_COMMANDS=ON. Configure at least once first.
+  "version": 4,
+  "configurations": [
+    {
+      "name": "STM32F407 (Debug)",
+      "compileCommands": "${workspaceFolder}/build/Debug/compile_commands.json",
+      "compilerPath": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/arm-none-eabi-gcc.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++20",
+      "intelliSenseMode": "gcc-arm",
+      "defines": [
+        "STM32F407xx",
+        "USE_HAL_DRIVER",
+        "DEBUG",
+        "STM32_THREAD_SAFE_STRATEGY=2"
+      ],
+      // Fallbacks used only until the first configure produces
+      // compile_commands.json.
+      "includePath": [
+        "${workspaceFolder}/Core/Inc",
+        "${workspaceFolder}/Drivers/STM32F4xx_HAL_Driver/Inc",
+        "${workspaceFolder}/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
+        "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F4xx/Include",
+        "${workspaceFolder}/Drivers/CMSIS/Include",
+        "${workspaceFolder}/components/**",
+        "${workspaceFolder}/Resources/**",
+        "${workspaceFolder}/Tasks/**"
+      ]
+    }
+  ]
+}

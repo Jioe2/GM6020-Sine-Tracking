@@ -1,0 +1,119 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CMake: 配置 (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--preset", "Debug"],
+      "options": { "env": { "PATH": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin;D:/download/ninja-win;D:/download/bin;${env:PATH}" } },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true }
+    },
+    {
+      "label": "CMake: 配置 (Release)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--preset", "Release"],
+      "options": { "env": { "PATH": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin;D:/download/ninja-win;D:/download/bin;${env:PATH}" } },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true }
+    },
+
+    {
+      "label": "生成", 
+      "detail": "cmake --build --preset Debug  ->  build/project.elf",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "Debug"],
+      "options": { "env": { "PATH": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin;D:/download/ninja-win;D:/download/bin;${env:PATH}" } },
+      "problemMatcher": ["$gcc"],
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true }
+    },
+    {
+      "label": "生成 (Release)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "Release"],
+      "options": { "env": { "PATH": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin;D:/download/ninja-win;D:/download/bin;${env:PATH}" } },
+      "problemMatcher": ["$gcc"],
+      "group": "build"
+    },
+
+    {
+      "label": "烧录 (OpenOCD + J-Link)",
+      "detail": "生成后用 J-Link 烧写并复位",
+      "type": "shell",
+      "command": "D:/download/tools/OpenOCD-20260302-0.12.0/bin/openocd.exe",
+      "args": [
+        "-s", "D:/download/tools/OpenOCD-20260302-0.12.0/share/openocd/scripts",
+        "-f", "${workspaceFolder}/tools/openocd/jlink-f407.cfg",
+        "-c", "adapter speed 4000",
+        "-c", "program {${workspaceFolder}/build/project.elf} verify reset exit"
+      ],
+      "dependsOn": "生成",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "烧录 (不重新生成)",
+      "type": "shell",
+      "command": "D:/download/tools/OpenOCD-20260302-0.12.0/bin/openocd.exe",
+      "args": [
+        "-s", "D:/download/tools/OpenOCD-20260302-0.12.0/share/openocd/scripts",
+        "-f", "${workspaceFolder}/tools/openocd/jlink-f407.cfg",
+        "-c", "adapter speed 4000",
+        "-c", "program {${workspaceFolder}/build/project.elf} verify reset exit"
+      ],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+
+    {
+      "label": "OpenOCD: GDB 服务器",
+      "detail": "留在前台运行，GDB 端口 3333，TCL 端口 4444",
+      "type": "shell",
+      "command": "D:/download/tools/OpenOCD-20260302-0.12.0/bin/openocd.exe",
+      "args": [
+        "-s", "D:/download/tools/OpenOCD-20260302-0.12.0/share/openocd/scripts",
+        "-f", "${workspaceFolder}/tools/openocd/jlink-f407.cfg",
+        "-c", "adapter speed 4000"
+      ],
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "J-Link 状态",
+      "detail": "确认探针是否被识别 —— 烧录报 No J-Link device found 时先跑这个",
+      "type": "shell",
+      "command": "D:/download/tools/OpenOCD-20260302-0.12.0/bin/openocd.exe",
+      "args": ["-c", "adapter driver jlink; adapter speed 4000; init; jlink hwstatus; shutdown"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+    {
+      "label": "擦除 Flash",
+      "type": "shell",
+      "command": "D:/download/tools/OpenOCD-20260302-0.12.0/bin/openocd.exe",
+      "args": [
+        "-s", "D:/download/tools/OpenOCD-20260302-0.12.0/share/openocd/scripts",
+        "-f", "${workspaceFolder}/tools/openocd/jlink-f407.cfg",
+        "-c", "adapter speed 4000",
+        "-c", "init; reset halt; flash erase_sector 0 0 last; exit"
+      ],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared" }
+    },
+
+    {
+      "label": "清理 (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "Debug", "--target", "clean"],
+      "options": { "env": { "PATH": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin;D:/download/ninja-win;D:/download/bin;${env:PATH}" } },
+      "problemMatcher": []
+    }
+  ]
+}

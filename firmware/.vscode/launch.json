@@ -1,0 +1,70 @@
+{
+  // Requires the "cortex-debug" extension:
+  //   code --install-extension marus25.cortex-debug
+  //
+  // searchDir is what makes [find interface/jlink.cfg] and
+  // [find target/stm32f4x.cfg] resolve: cortex-debug turns each entry into a
+  // -s for OpenOCD, so both this project's folder and OpenOCD's own script
+  // directory have to be listed.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "调试 (OpenOCD + J-Link)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "openocd",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/project.elf",
+
+      // Informational for the openocd server type; the flash algorithm comes
+      // from target/stm32f4x.cfg. From C_project.ioc: Mcu.CPN=STM32F407IGH6TR
+      "device": "STM32F407IG",
+
+      "configFiles": ["${workspaceFolder}/tools/openocd/jlink-f407.cfg"],
+      "searchDir": [
+        "${workspaceFolder}/tools/openocd",
+        "D:/download/tools/OpenOCD-20260302-0.12.0/share/openocd/scripts"
+      ],
+      "openOCDPath": "D:/download/tools/OpenOCD-20260302-0.12.0/bin/openocd.exe",
+      "gdbPath": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/arm-none-eabi-gdb.exe",
+      "objdumpPath": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/arm-none-eabi-objdump.exe",
+
+      "preLaunchTask": "生成",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none",
+      "breakAfterReset": true
+    },
+    {
+      "name": "调试 (不重新生成)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "openocd",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/project.elf",
+      "device": "STM32F407VG",
+      "configFiles": ["${workspaceFolder}/tools/openocd/jlink-f407.cfg"],
+      "searchDir": [
+        "${workspaceFolder}/tools/openocd",
+        "D:/download/tools/OpenOCD-20260302-0.12.0/share/openocd/scripts"
+      ],
+      "openOCDPath": "D:/download/tools/OpenOCD-20260302-0.12.0/bin/openocd.exe",
+      "gdbPath": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/arm-none-eabi-gdb.exe",
+      "objdumpPath": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/arm-none-eabi-objdump.exe",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none"
+    },
+    {
+      // For when OpenOCD is already running (task "OpenOCD: GDB 服务器").
+      "name": "附加到已运行的 OpenOCD",
+      "type": "cortex-debug",
+      "request": "attach",
+      "servertype": "external",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/project.elf",
+      "device": "STM32F407VG",
+      "gdbPath": "D:/download/tools/arm-toolchain/PFiles64/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/arm-none-eabi-gdb.exe",
+      "gdbTarget": "localhost:3333",
+      "showDevDebugOutput": "none"
+    }
+  ]
+}
