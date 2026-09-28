@@ -1,0 +1,37 @@
+# ===== 编译产物 =====
+build/
+Debug/
+Release/
+*.o
+*.obj
+*.axf
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.d
+*.crf
+*.dep
+*.lnp
+*.sct
+*.htm
+*.bak
+
+# ===== IDE / 工具 =====
+.vscode/
+.idea/
+*.uvguix.*
+*.uvoptx
+JLinkLog.txt
+JLinkSettings.ini
+*.tmp
+
+# ===== 操作系统 =====
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ===== 压缩包 =====
+*.zip
+*.rar
